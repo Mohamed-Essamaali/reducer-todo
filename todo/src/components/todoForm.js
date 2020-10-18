@@ -2,23 +2,31 @@ import React, { useState } from 'react'
 
 const TodoForm = props=>{
     
-    handleChange = e=>{
-        props.setItem({...props.item,item:e.target.value})
-        console.log('item',item)
+    const[item,setItem]= useState({task:''})
+   
+   const handleChange = e=>{
+        setItem({...item,[e.target.name]:e.target.value})
+        
+    }
+    const handleSubmit=e=>{
+        e.preventDefault();
+        props.addItem(e,item)
+        setItem({task:''});
+        console.log('form submitted')
     }
 
     return(
         <div>
-        <form onSubmit={props.addItem}>
+        <form onSubmit={handleSubmit}>
             <label htmlFor='item'>Enter Todo</label>
             <input 
-                id='item' 
-                name='item' 
-                value={props.item} 
+                id='todo' 
+                name='todo' 
+                value={item.task} 
                 onChange={handleChange} 
                 palceholder="Enter your item todo"
             />
-             
+             <button >Add Todo</button>
         </form>
     </div>
     )

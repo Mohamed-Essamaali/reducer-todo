@@ -1,40 +1,49 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer } from 'react';
 import Todo from './todo';
-import {reducer,initialState,ADD_ITEM} from './reducers/reducer' ;
+import {reducer,initialState,ADD_ITEM,TOGGLE_ITEM,CLEAR_ITEM} from '../reducers/reducer' ;
 import TodoForm from './todoForm';
 
 const TodoList = () =>{
 
     const[state,dispatch] = useReducer(reducer,initialState);
+    console.log('state in todolist',state)
 
-    const[item,setItem] = useState('');
-        
-    
-  
-    const  addItem = e=>{
+    const  addItem = (e,item)=>{
        e.preventDefault();
-        let newItem = {
-            id: Date.now(),
-            item: item,
-            completed:true
-        }
+     dispatch({type: ADD_ITEM, payload: item.todo})
         
-        console.log('item is added to items List')
+        console.log('addItem called')
       
       }
+      const  toggle = (itemId)=>{
+         
+          dispatch({type: TOGGLE_ITEM, payload: itemId})
+          console.log('toggle item id called')
+        
+       
+       }
+       const  clearItem = (e)=>{
+        e.preventDefault();
+            dispatch({type: CLEAR_ITEM})
+         
+         console.log('cleared item is called')
+       
+       }
 
-  
 
 
         return(
             <div>
              
-                <TodoForm addItem={addItem} setItem={setItem} item={item}/>
-                <button onClick={()=>dispatch({type: ADD_ITEM })}>Add Todo</button>
+                <TodoForm addItem = {addItem}/>
+                
                 <div>
-                    {this.state.items.map(item=>{
-                        return (<Todo item={item}/>)
+                    {state.todos.map(todo=>{
+                        return (<Todo key={todo.id} todo={todo} toggle={toggle}/>)
                     })}
+                    <button onClick = {clearItem}>
+                           Clear Completed Task
+                     </button>
                 </div>
                
             </div>
